@@ -25,9 +25,11 @@ namespace DigitalShowcaseAPIServer.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<List<Lot?>>> Get()
+        public async Task<ActionResult<List<LotTransferObject>>> Get()
         {
-            return Ok(await _api.GetLotsAsync(0, 0));
+            List<Lot> lots = await _api.GetLotsAsync(0, 0);
+            List<LotTransferObject> transferObjects = lots.Select(lot => lot.ToTransferObject()).ToList();
+            return Ok(transferObjects);
         }
 
         /// <summary>
@@ -67,7 +69,7 @@ namespace DigitalShowcaseAPIServer.Controllers
             if (lot is null)
                 return NoContent();
 
-            return Created($"/api/lots/{lot.Id}", lot);
+            return Created($"/api/lots/{lot.Id}", lot.ToTransferObject());
         }
 
         /// <summary>

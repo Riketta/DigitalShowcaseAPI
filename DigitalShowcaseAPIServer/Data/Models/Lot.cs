@@ -21,6 +21,11 @@ namespace DigitalShowcaseAPIServer.Data.Models
         [Required, MaxLength(256)]
         public string? ImageURL { get; set; }
 
+        [MaxLength(128)]
+        public string? Name { get; set; }
+
+        [MaxLength(300)]
+        public string? Description { get; set; }
 
         /// <summary>
         /// Is item sold (for historical purposes, item should be hidden from user view)
@@ -64,11 +69,15 @@ namespace DigitalShowcaseAPIServer.Data.Models
         {
             var lot = new Lot
             {
+                Id = transferObject.Id,
                 CategoryId = transferObject.CategoryId,
                 ImageURL = transferObject.ImageURL,
 
+                Name = transferObject.Name,
+                Description = transferObject.Description,
                 IsSold = transferObject.IsSold,
                 Price = transferObject.Price,
+                Amount = transferObject.Amount,
                 Priority = transferObject.Priority,
             };
 
@@ -93,10 +102,15 @@ namespace DigitalShowcaseAPIServer.Data.Models
         {
             var transferObject = new LotTransferObject
             {
+                Id = Id,
                 CategoryId = CategoryId,
                 ImageURL = ImageURL,
+
+                Name = Name,
+                Description = Description,
                 IsSold = IsSold,
                 Price = Price,
+                Amount = Amount,
                 Priority = Priority,
                 
                 Diablo4_LotsData = LotData_Diablo4?.ToTransferObject() as Diablo4.LotDataTransferObject,

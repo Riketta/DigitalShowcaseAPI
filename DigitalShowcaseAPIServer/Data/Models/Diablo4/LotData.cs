@@ -11,12 +11,6 @@ namespace DigitalShowcaseAPIServer.Data.Models.Diablo4
         public int Id { get; set; }
 
         #region Category Specific Data
-        [MaxLength(128)]
-        public string? Name { get; set; }
-
-        [MaxLength(300)]
-        public string? Description { get; set; }
-
         [Required]
         public int Level { get; set; }
 
@@ -43,8 +37,6 @@ namespace DigitalShowcaseAPIServer.Data.Models.Diablo4
             var lotData = new LotData()
             {
                 Level = obj.Level,
-                Name = obj.Name,
-                Description = obj.Description,
                 ClassId = obj.Class,
                 ItemTypeId = obj.ItemType,
             };
@@ -57,8 +49,6 @@ namespace DigitalShowcaseAPIServer.Data.Models.Diablo4
             var transferObject = new LotDataTransferObject()
             {
                 Level = Level,
-                Name = Name,
-                Description = Description,
                 Class = ClassId,
                 ItemType = ItemTypeId,
             };

@@ -110,7 +110,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
             return lot;
         }
 
-        public async Task<Lot?> UpdateLotAsync(Lot? lot)
+        public async Task<Lot?> UpdateLotAsync(Lot? lot) // TODO: rewrite usinng transfer objects
         {
             if (lot is null)
                 return null;
@@ -124,7 +124,11 @@ namespace DigitalShowcaseAPIServer.Data.APIs
             if (existingLot is null)
                 return null;
 
+            existingLot.Name = lot.Name;
+            existingLot.Description = lot.Description;
             existingLot.IsSold = lot.IsSold;
+            existingLot.Price = lot.Price;
+            existingLot.Amount = lot.Amount;
             existingLot.Priority = lot.Priority;
             existingLot.DateSold = lot.DateSold;
 
@@ -142,8 +146,6 @@ namespace DigitalShowcaseAPIServer.Data.APIs
                     if (existingLot.LotData_Diablo4 is null || lot.LotData_Diablo4 is null)
                         return null;
 
-                    existingLot.LotData_Diablo4.Name = lot.LotData_Diablo4.Name;
-                    existingLot.LotData_Diablo4.Description = lot.LotData_Diablo4.Description;
                     existingLot.LotData_Diablo4.Level = lot.LotData_Diablo4.Level;
                     existingLot.LotData_Diablo4.Class = lot.LotData_Diablo4.Class; // TODO: use Id?
                     existingLot.LotData_Diablo4.ItemType = lot.LotData_Diablo4.ItemType;
