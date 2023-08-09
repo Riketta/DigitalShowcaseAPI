@@ -32,7 +32,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
         /// <param name="categoryId"></param>
         /// <param name="includeSoldLots"></param>
         /// <returns></returns>
-        public async Task<List<Lot>?> GetLotsAsync(int pageSize, int pageIndex, Category.CategoryId categoryId = Category.CategoryId.None, bool includeSoldLots = false)
+        public async Task<List<Lot>> GetLotsAsync(int pageSize, int pageIndex, Category.CategoryId categoryId = Category.CategoryId.None, bool includeSoldLots = false)
         {
             return await _db.Lots // TODO: implement querying and pagination
                 .Include(lot => lot.LotData_VersaDebug)
@@ -88,8 +88,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
                 return null;
 
             // Filling required internal fields
-            lot.DateAdded = DateTime.UtcNow;
-            lot.DateSold = DateTime.MinValue;
+            lot.Id = 0; // prevents user to try to add existing Id and expose exception
             lot.AddedByUserId = userId;
 
             lot = _db.Lots.Add(lot).Entity;
