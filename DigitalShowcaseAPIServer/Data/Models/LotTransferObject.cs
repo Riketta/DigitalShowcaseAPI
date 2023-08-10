@@ -5,6 +5,9 @@ namespace DigitalShowcaseAPIServer.Data.Models
 {
     public class LotTransferObject
     {
+        /// <summary>
+        /// Client should ignore this field when making requests, unless trying to update an existing lot with a specific id.
+        /// </summary>
         public int Id { get; set; }
 
         [Required]
