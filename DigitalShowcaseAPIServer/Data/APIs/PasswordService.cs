@@ -42,7 +42,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
             //byte[] buffer = RandomNumberGenerator.GetBytes(16);
             //string salt = ByteArrayToBase64String(buffer);
             //return salt;
-            return Guid.NewGuid().ToString();
+            return Guid.NewGuid().ToString("N");
         }
 
         public Task<byte[]?> HashPasswordAsync(string password, string salt) // TODO: use IPasswordHasher
