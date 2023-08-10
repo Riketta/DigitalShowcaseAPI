@@ -34,10 +34,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
         /// <returns></returns>
         public async Task<List<Lot>> GetLotsAsync(int pageSize, int pageIndex, Category.CategoryId categoryId = Category.CategoryId.None, bool includeSoldLots = false)
         {
-            return await _db.Lots // TODO: implement querying and pagination
-                .Include(lot => lot.LotData_VersaDebug)
-                .Include(lot => lot.LotData_Diablo4)
-                .ToListAsync();
+            return await _db.Lots.IncludeLotData().ToListAsync(); // TODO: implement querying and pagination
 
             //if (categoryId == Category.CategoryId.None)
             //    return await _db.Lots
@@ -57,10 +54,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
 
         public async Task<Lot?> GetLotAsync(int id)
         {
-            Lot? lot = await _db.Lots
-                .Include(lot => lot.LotData_VersaDebug)
-                .Include(lot => lot.LotData_Diablo4)
-                .SingleOrDefaultAsync(lot => lot.Id == id);
+            Lot? lot = await _db.Lots.IncludeLotData().SingleOrDefaultAsync(lot => lot.Id == id);
 
             if (lot is null)
                 return null;
@@ -114,10 +108,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
             if (lot is null)
                 return null;
 
-            Lot? existingLot = await _db.Lots
-                                .Include(lot => lot.LotData_VersaDebug)
-                                .Include(lot => lot.LotData_Diablo4)
-                                .SingleOrDefaultAsync(l => l.Id == lot.Id);
+            Lot? existingLot = await _db.Lots.IncludeLotData().SingleOrDefaultAsync(l => l.Id == lot.Id);
 
             if (existingLot is null)
                 return null;
@@ -156,10 +147,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
 
         public async Task<bool?> DeleteLotAsync(int id)
         {
-            Lot? lot = await _db.Lots
-                .Include(lot => lot.LotData_VersaDebug)
-                .Include(lot => lot.LotData_Diablo4)
-                .SingleOrDefaultAsync(lot => lot.Id == id);
+            Lot? lot = await _db.Lots.IncludeLotData().SingleOrDefaultAsync(lot => lot.Id == id);
             
             if (lot is null)
                 return false;
