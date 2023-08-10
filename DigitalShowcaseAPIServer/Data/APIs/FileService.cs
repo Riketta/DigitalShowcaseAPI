@@ -66,7 +66,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
 
         public async Task DeleteFileByNameAsync(string filename)
         {
-            Models.File? file = await _db.Files.Where(x => x.Name == filename).SingleOrDefaultAsync();
+            Models.File? file = await _db.Files.SingleOrDefaultAsync(x => x.Name == filename);
 
             if (file is null)
                 return;
@@ -121,7 +121,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
         /// <returns></returns>
         public async Task<Models.File?> DownloadFileByNameAsync(string filename)
         {
-            Models.File? file = await _db.Files.Where(x => x.Name == filename).SingleOrDefaultAsync();
+            Models.File? file = await _db.Files.SingleOrDefaultAsync(x => x.Name == filename);
 
             if (file is null || file.Data is null)
                 return null;

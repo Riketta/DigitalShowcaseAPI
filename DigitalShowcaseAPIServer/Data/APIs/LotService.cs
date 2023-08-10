@@ -58,10 +58,9 @@ namespace DigitalShowcaseAPIServer.Data.APIs
         public async Task<Lot?> GetLotAsync(int id)
         {
             Lot? lot = await _db.Lots
-                .Where(lot => lot.Id == id)
                 .Include(lot => lot.LotData_VersaDebug)
                 .Include(lot => lot.LotData_Diablo4)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(lot => lot.Id == id);
 
             if (lot is null)
                 return null;
@@ -116,10 +115,9 @@ namespace DigitalShowcaseAPIServer.Data.APIs
                 return null;
 
             Lot? existingLot = await _db.Lots
-                                .Where(l => l.Id == lot.Id)
                                 .Include(lot => lot.LotData_VersaDebug)
                                 .Include(lot => lot.LotData_Diablo4)
-                                .SingleOrDefaultAsync();
+                                .SingleOrDefaultAsync(l => l.Id == lot.Id);
 
             if (existingLot is null)
                 return null;
@@ -159,10 +157,9 @@ namespace DigitalShowcaseAPIServer.Data.APIs
         public async Task<bool?> DeleteLotAsync(int id)
         {
             Lot? lot = await _db.Lots
-                .Where(lot => lot.Id == id)
                 .Include(lot => lot.LotData_VersaDebug)
                 .Include(lot => lot.LotData_Diablo4)
-                .SingleOrDefaultAsync();
+                .SingleOrDefaultAsync(lot => lot.Id == id);
             
             if (lot is null)
                 return false;

@@ -72,9 +72,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
         /// <returns></returns>
         public async Task<User?> FindUserByNameAsync(string name)
         {
-            User? user = await _db.Users
-                .Where(user => user.Name.ToLower() == name.ToLower()) // TODO: fix client-side filtering due to .ToLower()?
-                .SingleOrDefaultAsync();
+            User? user = await _db.Users.SingleOrDefaultAsync(user => user.Name.ToLower() == name.ToLower()); // TODO: fix client-side filtering due to .ToLower()?
 
             return user;
         }
