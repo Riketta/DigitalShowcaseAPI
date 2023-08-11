@@ -32,9 +32,9 @@ namespace DigitalShowcaseAPIServer.Data.APIs
         /// <param name="categoryId"></param>
         /// <param name="includeSoldLots"></param>
         /// <returns></returns>
-        public async Task<List<Lot>> GetLotsAsync(int pageSize, int pageIndex, Category.CategoryId categoryId = Category.CategoryId.None, bool includeSoldLots = false)
+        public async Task<List<LotTransferObject>> GetLotsAsync(int pageSize, int pageIndex, Category.CategoryId categoryId = Category.CategoryId.None, bool includeSoldLots = false)
         {
-            return await _db.Lots.IncludeLotData().ToListAsync(); // TODO: implement querying and pagination
+            return await _db.Lots.IncludeLotData().Select(lot => lot.ToTransferObject()).ToListAsync(); // TODO: implement querying and pagination
 
             //if (categoryId == Category.CategoryId.None)
             //    return await _db.Lots
@@ -52,7 +52,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
             //    .ToListAsync();
         }
 
-        public async Task<Lot?> GetLotAsync(int id)
+        public async Task<LotTransferObject?> GetLotAsync(int id)
         {
             Lot? lot = await _db.Lots.IncludeLotData().SingleOrDefaultAsync(lot => lot.Id == id);
 
@@ -72,11 +72,15 @@ namespace DigitalShowcaseAPIServer.Data.APIs
                     break;
             }
 
-            return lot;
+            return lot.ToTransferObject();
         }
 
-        public async Task<Lot?> AddLotAsync(Lot? lot, int userId)
+        public async Task<LotTransferObject?> AddLotAsync(LotTransferObject? lotTransferObject, int userId)
         {
+            if (lotTransferObject is null)
+                return null;
+
+            Lot? lot = Lot.FromTransferObject(lotTransferObject);
             if (lot is null)
                 return null;
 
@@ -100,16 +104,19 @@ namespace DigitalShowcaseAPIServer.Data.APIs
             }
 
             await _db.SaveChangesAsync();
-            return lot;
+            return lot.ToTransferObject();
         }
 
-        public async Task<Lot?> UpdateLotAsync(Lot? lot) // TODO: rewrite usinng transfer objects
+        public async Task<LotTransferObject?> UpdateLotAsync(LotTransferObject? lotTransferObject) // TODO: rewrite usinng transfer objects
         {
+            if (lotTransferObject is null)
+                return null;
+
+            Lot? lot = Lot.FromTransferObject(lotTransferObject);
             if (lot is null)
                 return null;
 
             Lot? existingLot = await _db.Lots.IncludeLotData().SingleOrDefaultAsync(l => l.Id == lot.Id);
-
             if (existingLot is null)
                 return null;
 
@@ -142,7 +149,7 @@ namespace DigitalShowcaseAPIServer.Data.APIs
             }
 
             await _db.SaveChangesAsync();
-            return existingLot;
+            return existingLot.ToTransferObject();
         }
 
         public async Task<bool?> DeleteLotAsync(int id)

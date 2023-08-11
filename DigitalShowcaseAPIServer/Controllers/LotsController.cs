@@ -27,9 +27,8 @@ namespace DigitalShowcaseAPIServer.Controllers
         [HttpGet]
         public async Task<ActionResult<List<LotTransferObject>>> Get()
         {
-            List<Lot> lots = await _api.GetLotsAsync(0, 0);
-            List<LotTransferObject> transferObjects = lots.Select(lot => lot.ToTransferObject()).ToList();
-            return Ok(transferObjects);
+            List<LotTransferObject> lotTransferObject = await _api.GetLotsAsync(0, 0);
+            return Ok(lotTransferObject);
         }
 
         /// <summary>
@@ -42,13 +41,12 @@ namespace DigitalShowcaseAPIServer.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<LotTransferObject>> GetLotById(int id)
         {
-            Lot? lot = await _api.GetLotAsync(id);
+            LotTransferObject? lotTransferObject = await _api.GetLotAsync(id);
 
-            if (lot is null)
+            if (lotTransferObject is null)
                 return NotFound($"No lot found with id: {id}");
 
-            var transferObject = lot.ToTransferObject();
-            return Ok(transferObject);
+            return Ok(lotTransferObject);
         }
 
         /// <summary>
@@ -65,28 +63,28 @@ namespace DigitalShowcaseAPIServer.Controllers
             if (lotTransferObject is null)
                 return BadRequest();
 
-            var lot = await _api.AddLotAsync(Lot.FromTransferObject(lotTransferObject), int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!));
-            if (lot is null)
+            var addedLotTransferObject = await _api.AddLotAsync(lotTransferObject, int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value!));
+            if (addedLotTransferObject is null)
                 return NoContent();
 
-            return Created($"/api/lots/{lot.Id}", lot.ToTransferObject());
+            return Created($"/api/lots/{addedLotTransferObject.Id}", addedLotTransferObject);
         }
 
         /// <summary>
         /// Replace existing <see cref="Lot"/> lot with same object updated with new data. Receive existing data first using <see cref="GetLotById(int)"/> then pass it in body with new data keeping indexing fields with original data. Checks user authorization.
         /// </summary>
-        /// <param name="lot"></param>
+        /// <param name="lotTransferObject"></param>
         /// <returns></returns>
         [HttpPut]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [Authorize(Roles = "Admin, MasterAdmin")]
-        public async Task<ActionResult<Lot>> UpdateLot([FromBody] Lot? lot)
+        public async Task<ActionResult<LotTransferObject>> UpdateLot([FromBody] LotTransferObject? lotTransferObject)
         {
-            Lot? updatedLot = await _api.UpdateLotAsync(lot);
-            if (updatedLot is null)
+            LotTransferObject? updatedLotTransferObject = await _api.UpdateLotAsync(lotTransferObject);
+            if (updatedLotTransferObject is null)
                 return NotFound($"Can't update non-existent lot!");
             
-            return updatedLot;
+            return updatedLotTransferObject;
         }
 
         /// <summary>

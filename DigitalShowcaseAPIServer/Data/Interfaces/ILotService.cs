@@ -26,10 +26,10 @@ namespace DigitalShowcaseAPIServer.Data.Interfaces
         /// <param name="categoryId"></param>
         /// <param name="includeSoldLots"></param>
         /// <returns></returns>
-        public Task<List<Lot>> GetLotsAsync(int pageSize, int pageIndex, Category.CategoryId categoryId = Category.CategoryId.None, bool includeSoldLots = false);
-        public Task<Lot?> AddLotAsync(Lot? lot, int userId);
-        public Task<Lot?> GetLotAsync(int id);
-        public Task<Lot?> UpdateLotAsync(Lot? lot);
+        public Task<List<LotTransferObject>> GetLotsAsync(int pageSize, int pageIndex, Category.CategoryId categoryId = Category.CategoryId.None, bool includeSoldLots = false);
+        public Task<LotTransferObject?> AddLotAsync(LotTransferObject? lot, int userId);
+        public Task<LotTransferObject?> GetLotAsync(int id);
+        public Task<LotTransferObject?> UpdateLotAsync(LotTransferObject? lot);
         public Task<bool?> DeleteLotAsync(int id);
     }
 }
