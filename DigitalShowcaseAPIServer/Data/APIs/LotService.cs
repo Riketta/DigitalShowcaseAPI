@@ -120,15 +120,9 @@ namespace DigitalShowcaseAPIServer.Data.APIs
             if (existingLot is null)
                 return null;
 
-            existingLot.Name = lot.Name;
-            existingLot.Description = lot.Description;
-            existingLot.IsSold = lot.IsSold;
-            existingLot.Price = lot.Price;
-            existingLot.Amount = lot.Amount;
-            existingLot.Priority = lot.Priority;
-            existingLot.DateSold = lot.DateSold;
+            existingLot.Update(lot);
 
-            switch (existingLot.CategoryId)
+            switch (existingLot.CategoryId) // TODO: replace this with according LotTransferObject.Update method
             {
                 case Category.CategoryId.VersaDebug:
                     if (existingLot.LotData_VersaDebug is null || lot.LotData_VersaDebug is null)
