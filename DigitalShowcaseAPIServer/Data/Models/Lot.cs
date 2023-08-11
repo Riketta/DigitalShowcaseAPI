@@ -65,6 +65,35 @@ namespace DigitalShowcaseAPIServer.Data.Models
         public Diablo4.LotData? LotData_Diablo4 { get; set; }
         #endregion
 
+        /// <summary>
+        /// Update the current lot based on the data provided by the other lot, keeping the original <see cref="Id"/>. 
+        /// </summary>
+        /// <param name="lot"></param>
+        /// <returns></returns>
+        public Lot Update(Lot lot)
+        {
+            CategoryId = lot.CategoryId;
+            ImageURL = lot.ImageURL;
+
+            Name = lot.Name;
+            Description = lot.Description;
+            IsSold = lot.IsSold;
+            Price = lot.Price;
+            Amount = lot.Amount;
+            Priority = lot.Priority;
+
+            return this;
+        }
+
+        public Lot? Update(LotTransferObject lotTransferObject)
+        {
+            Lot? lot = FromTransferObject(lotTransferObject);
+            if (lot is null)
+                return null;
+
+            return Update(lot);
+        }
+
         public static Lot? FromTransferObject(LotTransferObject transferObject)
         {
             var lot = new Lot
@@ -92,7 +121,7 @@ namespace DigitalShowcaseAPIServer.Data.Models
                     break;
 
                 default:
-                    return null;
+                    return null; // TODO: throw new exception?
             }
 
             return lot;
